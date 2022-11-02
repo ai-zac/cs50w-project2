@@ -14,9 +14,9 @@ def index():
     return render_template("index.html")
 
 @socketio.on('message')
-def handle_data(msg):
-    print(msg)
-    emit("messageOut", msg, broadcast = True)
+def handle_data(msg, username):
+    print(msg, username)
+    emit("messageOut", (msg, username), broadcast = True)
 
 
 if __name__ == "__main__":

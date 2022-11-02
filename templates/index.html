@@ -11,9 +11,11 @@
         <h1>Chat - Test 00</h1> 
 
         <ul id="chat"></ul>
-        <input type="text" id="msg"> 
-        <button type="button" id="send">SEND</button>
-
+        <form>
+            <input placeholder="username" type="text" id="name">
+            <input placeholder="message" type="text" id="msg"> 
+            <button type="button" id="send">SEND</button>
+        </form>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
         <script src="../static/js/script.js" charset="UTF-8"></script>
     </body>
