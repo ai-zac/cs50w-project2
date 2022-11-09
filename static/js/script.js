@@ -4,13 +4,12 @@ var username, msgIn, msgOut;
 
 document.querySelector("#send").onclick = () => {
     if (document.querySelector("#name").value) {
-        username = document.querySelector("#name").value;
-        msgIn = document.querySelector("#msg").value;
         var date = new Date();
-        var dateMsg = `${date.getDate()}/${date.getMonth()}-${date.getHours()}:${date.getMinutes()}` 
+        var dateMsg = `${date.getDate()}/${date.getMonth()} ${date.getHours()}:${date.getMinutes()}min` 
+        username = document.querySelector("#name").value;
+        msgIn = document.querySelector(".msg").value;
         socket.send(msgIn, username, dateMsg);
-        // clean message
-        document.querySelector("#msg").value = "";
+        document.querySelector(".msg").value = "";
     } else {
         alert("Para enviar mensajes necesitas insertar un nombre de usuario")
     }
