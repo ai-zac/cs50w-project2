@@ -5,24 +5,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
         <link href="../static/css/index.css" rel="stylesheet">
-        <title>Prueba</title>
+        <title>{% block tittle %}{% endblock %}</title>
     </head>
 
     <body>
         <h1>Chat - Test 02</h1> 
 
-        <nav class="navbar navbar-dark bg-dark fixed-top">
+        <nav class="navbar navbar-light bg-light fixed-top">
             <div class="container-fluid">
                 <!-- narvbar oncanvas -->
                 <a class="navbar-brand" href="#">Chat - Test 02</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- navbar offcanvas --> 
-                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+                <div class="offcanvas offcanvas-end text-bg-light" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Channels</h5>
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Channels</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
 
@@ -37,11 +37,7 @@
                         </form>
 
                         <!-- Channel List -->
-                        <ul class="channels-list navbar-nav justify-content-end flex-grow-1 pe-3">
-                            <li class="nav-item">
-                                <a class="nav-link channel" href="#">Link</a>
-                            </li>
-                        </ul>
+                        <ul class="channels-list navbar-nav justify-content-end flex-grow-1 pe-3"></ul>
                     </div>
                 </div>
             </div>
@@ -69,19 +65,13 @@
         </form>
 
        -->
-
-        <ul id="chat" class="list-group list-group-flush"></ul>
-        <form>
-            <div class="input-group">
-                <textarea type="text" class="msg form-control" placeholder="message"></textarea> 
-            </div>
-            <input type="text" id="username" value="{{ username }}" hidden>
-            <button type="button" class="btn btn-dark" id="send">SEND</button>
-        </form>
+        {% block chat %}
+        {% endblock %} 
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-        <script src="../static/js/script.js" charset="UTF-8"></script>
+        <script src="../static/js/messages.js" charset="UTF-8"></script>
+        <script src="../static/js/channels.js" charset=ÜTF-8"></script>
     </body>
 </html>

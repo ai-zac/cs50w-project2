@@ -17,6 +17,11 @@ def index():
     print(f"El canal actual es {session['current_channel']}")
     return render_template("index.html", username=session["username"]) 
 
+@app.route("/channel/#<channel>", methods=["GET"])
+@login_required
+def channel(channel):
+    return render_template("channel.html", current_channel=channel)
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -63,6 +68,7 @@ def new_channel(channel):
 @socketio.on("entrar")
 def entrar(sala):
     # Ingresamos al usuario a la sala
+    print(f"la sala en entrar es {sala}")
     leave_room(session["current_channel"])
     join_room(sala)
 

@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block tittle %}
+{{ current_channel }}
+{% endblock %}
+
+{% block chat %}
+    <ul id="chat" class="list-group list-group-flush"></ul>
+    <form> 
+        <div class="input-group">
+            <textarea type="text" class="msg form-control" placeholder="message"></textarea> 
+        </div>
+        <input type="text" id="username" value="{{ username }}" hidden>
+        <button type="button" class="btn btn-light" id="send">SEND</button>
+    </form>
+{% endblock %} 
