@@ -11,9 +11,6 @@ document.querySelector("#send").onclick = () => {
     document.querySelector(".msg").value = "";
 };
 
-socket.on("test", function (data) {
-    alert(`Se EJECUTO test con ${data}`);
-});
 
 // View the messages
 socket.on("messageOut", function (msgOut, username, dateMsg, currentChannel) {
@@ -30,6 +27,7 @@ socket.on("messageOut", function (msgOut, username, dateMsg, currentChannel) {
 
 // Create new channel 
 document.querySelector(".createChannel").onclick = () => {
+    alert("SE EJECUTO createChannel")
     if (document.querySelector(".newChannel").value) {
         newChannel = document.querySelector(".newChannel").value;
         socket.emit("create_channel", newChannel);
@@ -41,6 +39,7 @@ document.querySelector(".createChannel").onclick = () => {
 
 // Show the new channel
 socket.on("newChannel", function (channel) {
+    alert("SE EJECUTO newChannel")
     document.querySelector(".channels-list").innerHTML += (
        `<li class="nav-item channel">
             <a class="nav-link" href="#">${channel}</a>

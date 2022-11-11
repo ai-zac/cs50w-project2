@@ -38,19 +38,24 @@ def message(msg, username, date):
     print(msg, username, date)
     join_room(session["current_channel"])
     emit('messageOut', (msg, username, date, session["current_channel"]), broadcast=True, to=session["current_channel"])
-    emit('test', {"keytest" : "datatest"})
 
 @socketio.on("create_channel")
 def new_channel(channel):
+    print("Se esta ejecutanto create_channel")
+    print(f"channel is {channel}")
     lower_channel = []
-    for channel in channels:
-        lower_channel.append(channel.lower())
+    for channelsItem in channels:
+        lower_channel.append(channelsItem.lower())
 
     if channel.lower() in lower_channel:
+        print("No se creo el chat")
+        print(f"la lista de canales actuales es: {lower_channel}")
         flash("This name is alraedy in use")
     else:
+        print("Si se creo el chat")
         channels.append(channel)
         leave_room(session["current_channel"])
+        print(f"la session de {session['username']} esta en {session['current_channel']}") 
         emit("newChannel", channel, broadcast=True) 
 
     lower_channel = []
