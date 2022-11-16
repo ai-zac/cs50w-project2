@@ -1,41 +1,57 @@
-// Create new channel 
+const socket = io();
+
+// That is for each new channel created
+function enableEnterChannel() {
+    channelsList = document.querySelectorAll(".channel a")
+    channelsList.forEach((channel) => {
+        channel.onclick = () => {
+            socket.emit("exitRoom");
+            socket.emit("enterRoom", channel.text);
+            document.querySelector("#current-channel").setAttribute("value", channel.text);
+        };
+    });
+};
+
+// Create a new channel 
 document.querySelector(".createChannel").onclick = () => {
-    alert("SE EJECUTO createChannel")
     if (document.querySelector(".newChannel").value) {
-        newChannel = document.querySelector(".newChannel").value;
-        socket.emit("create_channel", newChannel);
-        document.querySelector(".newChannel").value = "";
+        newChannel = document.querySelector(".newChannel");
+        socket.emit("create_channel", newChannel.value);
+        newChannel.value = "";
     } else {
         alert("Para crear un chat necesitas insertar un nombre");
     }
 };
 
 // Show the new channel
-socket.on("newChannel", function (channel) {
-    alert("SE EJECUTO newChannel")
+socket.on("showChannel", function (channel) {
+    alert("SE EJECUTO showChannel");
     document.querySelector(".channels-list").innerHTML += (
        `<li class="nav-item channel">
-            <a class="nav-link" href="/channel/#${channel}">${channel}</a>
+            <a class="nav-link" href="#">${channel}</a>
         </li>`
     );
+    enableEnterChannel();
 });
 
 // Enter to channel
-document.querySelector(".channel").onclick = () => {
-    enterChannel = document.querySelector(".channel").value;
-    socket.emit("entrar", enterChannel);
-    alert("ya le di click al canal");
-};
+enableEnterChannel();
+
+socket.on("alertStatus", function (status) {
+    document.querySelector("#chat").innerHTML += (`
+        <li class='list-group-item d-flex justify-content-between align-items-start'>
+            <div class="ms-2 me-auto">
+                ${status}
+            </div>
+    `);
+});
 
 // Change the visibility of the Messages
+/*
 socket.on("visibilityMsg", function (newCh, oldCh) {
     document.querySelectorAll(`.${oldCh}`).setAttribute("hidden", "");
     document.querySelectorAll(`.${newCh}`).removeAttribute("hidden");
 });
+*/
 
-socket.on("mensaje", function (mensaje) {
-    document.querySelector("#chat").innerHTML += (`
-        ${mensaje}
-    `);
-});
 

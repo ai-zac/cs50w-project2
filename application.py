@@ -1,84 +1,80 @@
+# Debug FLask and Socket
+from gevent import monkey
+monkey.patch_all()
+
+import os 
 import secrets
 
 from flask import Flask, render_template, redirect, request, session, flash
-from flask_socketio import SocketIO, emit, join_room, leave_room
+from flask_socketio import SocketIO, emit, send, join_room, leave_room, rooms
 from login_required import login_required
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = secrets.token_hex()
-socketio = SocketIO(app, cors_allowed_origins='*')
+# Debug socoketio: logger and engineio_logger
+socketio = SocketIO(app, cors_allowed_origins='*', logger=True, engineio_logger=True)
 
 channels = ["General"] 
+channel = ""
 messages = {channels[0] : []}
+users = {}
 
 @app.route("/")
 @login_required
 def index():
-    print(f"El canal actual es {session['current_channel']}")
-    return render_template("index.html", username=session["username"]) 
-
-@app.route("/channel/#<channel>", methods=["GET"])
-@login_required
-def channel(channel):
-    return render_template("channel.html", current_channel=channel)
+    global channels
+    return render_template("index.html", CHANNELS=channels)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    global users
     if request.method == "POST":
         username = request.form.get("username")
         session["username"] = username
-        session["current_channel"] = "General"
+        session["current_channel"] = ""
+        users[session["username"]] = session["current_channel"]
         return redirect("/")
     else:
         return render_template("login.html")
 
 @app.route("/logout")
+@login_required
 def logout():
     session.clear()
     return redirect("/login")
 
-
-@socketio.on('message')
-def message(msg, username, date):
-    print(msg, username, date)
-    join_room(session["current_channel"])
-    emit('messageOut', (msg, username, date, session["current_channel"]), broadcast=True, to=session["current_channel"])
+@app.context_processor
+def context_processor():
+    return dict(username=session, CHANNELS=channels)
 
 @socketio.on("create_channel")
-def new_channel(channel):
-    print("Se esta ejecutanto create_channel")
-    print(f"channel is {channel}")
-    lower_channel = []
-    for channelsItem in channels:
-        lower_channel.append(channelsItem.lower())
+def create_channel(new_channel):
+    lower_channels = []
+    for channels_item in channels:
+        lower_channels.append(channels_item.lower())
 
-    if channel.lower() in lower_channel:
-        print("No se creo el chat")
-        print(f"la lista de canales actuales es: {lower_channel}")
+    if new_channel.lower() in lower_channels:
         flash("This name is alraedy in use")
     else:
-        print("Si se creo el chat")
-        channels.append(channel)
-        leave_room(session["current_channel"])
-        print(f"la session de {session['username']} esta en {session['current_channel']}") 
-        emit("newChannel", channel, broadcast=True) 
+        emit("showChannel", new_channel, broadcast=True) 
 
     lower_channel = []
 
-@socketio.on("entrar")
-def entrar(sala):
-    # Ingresamos al usuario a la sala
-    print(f"la sala en entrar es {sala}")
-    leave_room(session["current_channel"])
+@socketio.on("enterRoom")
+def enter_room(sala):
     join_room(sala)
+    send((f"Has entrado al cuarto {sala}", "Flack", "Now"), to=sala)
+    rooms()
+    users[session["username"]] = sala
 
-    # Emitimos un aviso a los usuarios conectados a la sala, exceptuando a la persona que se unio
-    emit('mensaje', f'Un usuario ha entrado a la sala {sala}', broadcast=True, include_self=False, to=sala)
-    
-    emit('visibilityMsg', (sala, session["current_channel"])) 
-    # Mandamos una respuesta al evento emit del cliente
-    session["current_channel"] = sala 
-    return f'Te has unido a la sala {sala}'
+@socketio.on("exitRoom")
+def exit_room():
+    leave_room(users[session["username"]])
+
+@socketio.on('message')
+def process_messages(msg, username, date, current_channel):
+    send((msg, username, date), to=current_channel)
 
 
 if __name__ == "__main__":

@@ -9,12 +9,12 @@
     </head>
 
     <body>
-        <h1>Chat - Test 02</h1> 
+        <h1>Chat - Test 03</h1> 
 
         <nav class="navbar navbar-light bg-light fixed-top">
             <div class="container-fluid">
                 <!-- narvbar oncanvas -->
-                <a class="navbar-brand" href="#">Chat - Test 02</a>
+                <a class="navbar-brand" href="#">Chat - Test 03</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -37,7 +37,13 @@
                         </form>
 
                         <!-- Channel List -->
-                        <ul class="channels-list navbar-nav justify-content-end flex-grow-1 pe-3"></ul>
+                        <ul class="channels-list navbar-nav justify-content-end flex-grow-1 pe-3">
+                            {% for channel in CHANNELS %}
+                            <li class="nav-item channel">
+                                <a class="nav-link" href="#">{{channel}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -50,28 +56,22 @@
         </div>
         {% endif %}
 
-        <!-- 
-        <button id="boton1">Entrar a la sala: CS50x.ni</button>
-        <br>
-        <button id="boton2">Entrar a la sala: Web50x.ni</button>
+        {% block chat %}{% endblock %} 
 
-        <button id="salir1" hidden>Salir CS50x</button> 
-        <button id="salir2" hidden>Salir Wweb50x</button>
-
-        <ul id="chatList"></ul>
-        <form>
-            <input placeholder="nombre de chat" type="text" id="newChatName">
-            <button type="button" id="sendChat">SEND</button>
+        <ul id="chat" class="list-group list-group-flush"></ul>
+        <form> 
+            <div class="input-group">
+                <textarea type="text" class="msg form-control" placeholder="message"></textarea> 
+            </div>
+            <input type="text" id="username" value="{{ username['username'] }}" hidden>
+            <input type="text" id="current-channel" value="{{ current_channel }}" hidden>
+            <button type="button" class="btn btn-light" id="send">SEND</button>
         </form>
 
-       -->
-        {% block chat %}
-        {% endblock %} 
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script src="../static/js/channels.js" charset="UTF-8"></script>
+        <script src="../static/js/messages.js" charset="UTF-8"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-        <script src="../static/js/messages.js" charset="UTF-8"></script>
-        <script src="../static/js/channels.js" charset=ÜTF-8"></script>
-    </body>
+   </body>
 </html>
