@@ -11,7 +11,7 @@ document.querySelector("#send").onclick = () => {
 
 
 // Show the messages
-socket.on("message", function (msgOut, username, dateMsg) {
+socket.on("message", (msgOut, username, dateMsg) => {
     alert("SE EJECUTO EL showMessage");
     document.querySelector("#chat").innerHTML += (
         `<li class='list-group-item d-flex justify-content-between align-items-start'>

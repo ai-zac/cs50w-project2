@@ -12,6 +12,11 @@ function enableEnterChannel() {
     });
 };
 
+window.addEventListener("DOMContentLoaded", () => {
+    
+});
+
+
 // Create a new channel 
 document.querySelector(".createChannel").onclick = () => {
     if (document.querySelector(".newChannel").value) {
@@ -24,7 +29,7 @@ document.querySelector(".createChannel").onclick = () => {
 };
 
 // Show the new channel
-socket.on("showChannel", function (channel) {
+socket.on("showChannel", (channel) => {
     alert("SE EJECUTO showChannel");
     document.querySelector(".channels-list").innerHTML += (
        `<li class="nav-item channel">
@@ -37,7 +42,7 @@ socket.on("showChannel", function (channel) {
 // Enter to channel
 enableEnterChannel();
 
-socket.on("alertStatus", function (status) {
+socket.on("alertStatus", (status) => {
     document.querySelector("#chat").innerHTML += (`
         <li class='list-group-item d-flex justify-content-between align-items-start'>
             <div class="ms-2 me-auto">
