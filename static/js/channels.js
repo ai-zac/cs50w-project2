@@ -6,14 +6,13 @@ function enableEnterChannel() {
     channelsList.forEach((channel) => {
         channel.onclick = () => {
             socket.emit("exitRoom");
-            socket.emit("enterRoom", channel.text);
-            document.querySelector("#current-channel").setAttribute("value", channel.text);
         };
     });
 };
 
-window.addEventListener("DOMContentLoaded", () => {
-    
+document.addEventListener("DOMContentLoaded", () => {
+    cc = document.querySelector("#current-channel").value    
+    socket.emit("enterRoom", cc);
 });
 
 
@@ -33,7 +32,7 @@ socket.on("showChannel", (channel) => {
     alert("SE EJECUTO showChannel");
     document.querySelector(".channels-list").innerHTML += (
        `<li class="nav-item channel">
-            <a class="nav-link" href="#">${channel}</a>
+            <a class="nav-link" href="/${channel}">${channel}</a>
         </li>`
     );
     enableEnterChannel();
@@ -43,11 +42,16 @@ socket.on("showChannel", (channel) => {
 enableEnterChannel();
 
 socket.on("alertStatus", (status) => {
+    date = new Date();
+    dateMsg = `${date.getDate()}/${date.getMonth()} ${date.getHours()}:${date.getMinutes()}min`;
     document.querySelector("#chat").innerHTML += (`
         <li class='list-group-item d-flex justify-content-between align-items-start'>
             <div class="ms-2 me-auto">
+                <div class="fw-bold">Flack</div>
                 ${status}
             </div>
+            <span class="badge bg-primary rounded-pill">${dateMsg}</span>
+        </li>
     `);
 });
 

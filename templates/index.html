@@ -40,7 +40,7 @@
                         <ul class="channels-list navbar-nav justify-content-end flex-grow-1 pe-3">
                             {% for channel in CHANNELS %}
                             <li class="nav-item channel">
-                                <a class="nav-link" href="#">{{channel}}</a>
+                                <a class="nav-link" href="/{{ channel }}">{{ channel }}</a>
                             </li>
                             {% endfor %}
                         </ul>
@@ -58,15 +58,6 @@
 
         {% block chat %}{% endblock %} 
 
-        <ul id="chat" class="list-group list-group-flush"></ul>
-        <form> 
-            <div class="input-group">
-                <textarea type="text" class="msg form-control" placeholder="message"></textarea> 
-            </div>
-            <input type="text" id="username" value="{{ username['username'] }}" hidden>
-            <input type="text" id="current-channel" value="{{ current_channel }}" hidden>
-            <button type="button" class="btn btn-light" id="send">SEND</button>
-        </form>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
         <script src="../static/js/channels.js" charset="UTF-8"></script>

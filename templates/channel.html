@@ -1,8 +1,21 @@
 {% extends "index.html" %}
 
 {% block tittle %}
-{{ current_channel }}
+{{ c }}
 {% endblock %}
 
 {% block chat %}
+    <ul id="chat" class="list-group list-group-flush">
+        {% for i in m %}
+            {{ i }}
+        {% endfor %}
+    </ul>
+    <form> 
+        <div class="input-group">
+            <textarea type="text" class="msg form-control" placeholder="message"></textarea> 
+        </div>
+        <input type="text" id="username" value="{{ user }}" hidden>
+        <input type="text" id="current-channel" value="{{ c }}" hidden>
+        <button type="button" class="btn btn-light" id="send">SEND</button>
+    </form>
 {% endblock %} 
