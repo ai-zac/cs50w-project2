@@ -1,11 +1,11 @@
 // Send and process the messages 
 document.querySelector("#send").onclick = () => {
     date = new Date();
-    dateMsg = `${date.getDate()}/${date.getMonth()} ${date.getHours()}:${date.getMinutes()}min`;
-    username = document.querySelector("#username").value;
-    msgIn = document.querySelector(".msg").value;
-    currentChannel = document.querySelector("#current-channel").value;
-    socket.send(msgIn, username, dateMsg, currentChannel);
+    d = `${date.getDate()}/${date.getMonth()} ${date.getHours()}:${date.getMinutes()}min`;
+    u = document.querySelector("#username").value;
+    m = document.querySelector(".msg");
+    cc = document.querySelector("#current-channel").value;
+    socket.send(m, u, d, cc);
     document.querySelector(".msg").value = "";
 };
 
