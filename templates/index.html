@@ -13,11 +13,11 @@
         </title>
     </head>
     <body>
-        <h1>Chat - Test 03</h1>
         <nav class="navbar navbar-light bg-light fixed-top">
-            <div class="container-fluid">
+            <div class="container-fluid d-flex flex-row">
                 <!-- narvbar oncanvas -->
-                <a class="navbar-brand" href="#">Chat - Test 03</a>
+                <a class="navbar-brand " href="#"><h1><span class="badge bg-secondary">@{{ user }} - #{{ current_channel }}</span></h1></a>
+                <button class="btn btn-secondary position-fixed top-0 end-0" type="button">Logout</button>
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="offcanvas"
@@ -33,7 +33,7 @@
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Channels</h5>
                         <button type="button"
-                                class="btn-close btn-close-white"
+                                class="btn-close btn-close-black"
                                 data-bs-dismiss="offcanvas"
                                 aria-label="Close"></button>
                     </div>
@@ -51,9 +51,9 @@
                             <button type="button" class="btn btn-success createChannel">Create</button>
                         </form>
                         <!-- Channel List -->
-                        <ul class="channels-list navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <ul class="channels-list list-group list-group-flush navbar-nav justify-content-end flex-grow-1 pe-3">
                             {% for channel in CHANNELS %}
-                                <li class="nav-item channel">
+                                <li class="nav-item channel list-group-item">
                                     <a class="nav-link" href="/{{ channel }}">{{ channel }}</a>
                                 </li>
                             {% endfor %}
@@ -68,7 +68,11 @@
                 {{ get_flashed_messages() | join(" ") }}
             </div>
         {% endif %}
+
+        <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
         {% block chat %}{% endblock %}
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
         <script src="../static/js/channels.js" charset="UTF-8"></script>
         <script src="../static/js/messages.js" charset="UTF-8"></script>

@@ -1,5 +1,12 @@
 const socket = io();
 
+/*
+ * First: you click into channel
+ * Then: you will be redirect
+ * and next you will be join and 
+ * leave the previous channel
+*/
+
 document.addEventListener("DOMContentLoaded", () => {
     if (document.location.pathname != "/") {
         socket.emit("exitRoom");
@@ -40,27 +47,8 @@ document.querySelector(".createChannel").onclick = () => {
 // Show the new channel
 socket.on("showChannel", (channel) => {
     document.querySelector(".channels-list").innerHTML += (
-        `<li class="nav-item channel">
+        `<li class="nav-item channel list-group-item">
             <a class="nav-link" href="/${channel}">${channel}</a>
         </li>`
     );
-});
-
-// Alert where are you, "do you know the way"
-socket.on("alertStatus", (status) => {
-    date = new Date();
-    dateMsg = `${date.getDate()}/${date.getMonth()} ${date.getHours()}:${date.getMinutes()}min`;
-    document.querySelector("#chat").innerHTML += (`
-        <li class='list-group-item d-flex justify-content-between align-items-start'>
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Flack</div>
-                ${status}
-            </div>
-            <span class="badge bg-primary rounded-pill">${dateMsg}</span>
-        </li>
-    `);
-});
-
-socket.on("error", (msg) => {
-    alert(`${msg}`)
 });

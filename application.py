@@ -18,7 +18,7 @@ session_tmp = {}
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html", CHANNELS=chnls)
+    return render_template("index.html", CHANNELS=chnls, user=session["username"], current_channel="Inicio")
 
 
 @app.route("/<c>", methods=["GET", "POST"])
