@@ -4,13 +4,15 @@ from flask import Flask, render_template, redirect, request, session, flash, jso
 from flask_socketio import SocketIO, emit, send, join_room, leave_room, rooms
 from login_required import login_required
 import secrets
+import uuid
+
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = secrets.token_hex()
 socketio = SocketIO(app, cors_allowed_origins='*')
 chnls = ["General"]
-messages = {chnls[0]: []}
+messages = {chnls[0]: {}}
 # session out flask's context
 session_tmp = {}
 
@@ -26,7 +28,7 @@ def index():
 def channel(c):
     u = session["username"]
     session["current_channel"] = c
-    return render_template("channel.html", user = u, current_channel = c, msgs = messages[c])
+    return render_template("channel.html", user = u, current_channel = c, msgs = list(messages[c].items()))
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -73,7 +75,7 @@ def create_channel(new_chnl):
         emit("error", "Ese nombre ya esta en uso", broadcast=False)
     else:
         chnls.append(new_chnl)
-        messages[new_chnl] = []
+        messages[new_chnl] = {}
         emit("showChannel", new_chnl, broadcast=True)
     lwr_chnls = []
 
@@ -99,15 +101,22 @@ def exit_room():
 
 @socketio.on('message')
 def process_messages(m, u, d, cc):
-    l = messages[cc]
+    l = list(messages[cc].items())
+    id_m = uuid.uuid1()
 
     # Only save 100 messages
     if len(l) > 100:
         for i in range(0, (len(l) - 100)):
             l.pop(0)
-    messages[cc].append({"msg": m, "username": u, "date": d})
-    send((m, u, d), to=cc)
+        messages[cc] = dict((x, y) for x, y in l)
 
+    messages[cc].update({id_m.hex: {"msg": m, "username": u, "date": d}})
+    send((m, u, d, id_m.hex), to=cc)
+    emit("enableDelMsg", (id_m.hex, cc))
+
+@socketio.on('delMsg')
+def del_msg(i, cc):
+    del messages[cc][i]
 
 if __name__ == "__main__":
     socketio.run(app)
