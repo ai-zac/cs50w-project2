@@ -1,15 +1,15 @@
-#  FLASK || CS50w-Project02
+# FLACK || CS50w-Project02
 
-> Projecto inspirado de cs50w edicion 2018 por Harvard
+> Proyecto inspirado de cs50w edición 2018 por Harvard
 > Flack[¹] 
 
-> *El link es de la edicion 2019, no encontre la del 2018*
+> *El link es de la edición 2019, no encontre la del 2018*
 
 
 ---
 
 
-### Tecnologias usadas
+### Tecnologías usadas
 - Python-Flask
 - SocketIO-Flask
 - JavaScript
@@ -20,10 +20,10 @@
 
 
 ### Directorio
-> No mucho que agregar, solo un orden clasico de directorios para 
+> No mucho que agregar, solo un orden clásico de directorios para 
 > Flask. 
 
-> **P.D.** Utilice *tree*[²] para sacar este esquema en ascii 
+> **P.D.** Utilice *tree*[²] para sacar este esquema en ASCII 
 ```
 📁
 ├── application.py
@@ -49,28 +49,28 @@
 
 ## Ahora algunas preguntas sobre ciertos funcionamientos
 
-### ¿Como funciona el cambio de chats? 
+### ¿Cómo funciona el cambio de chats? 
 
-Al dar click en cualquier chat este primero es redirijido a la
+Al dar click en cualquier chat este primero es redirigido a la
 ruta `/channel` en donde *"channel"* es una *variable*[³] dentro de
-la ruta, de aqui sacamos el nombre del chat para poder obtener la informacion
+la ruta, de aquŕ sacamos el nombre del chat para poder obtener la información
 necesaria.
 
-Luego de que la pagina cargase en la nueva ruta, se activan las 
-funciones de socket de `exitRoom` y `enterRoom` en simultaneo, para ya luego
+Luego de que la página cargase en la nueva ruta, se activan las 
+funciones de socket de `exitRoom` y `enterRoom` en simultáneo, para ya luego
 dejar que el usuario pueda enviar mensajes y que estos se guarden 
 correctamente.
 
 
-### ¿Como funciona la redirrecion al chat previo?
+### ¿Cómo funciona la redirección al chat previo?
 
 > Con lo del ***chat previo*** me refiero al chat en el que estaba el 
 > usuario antes de cerrar la ventana o pestaña en donde estaba Flack 
-> , este al volver abrir la aplicacion debe ser redirijido a ese chat.
+> , este al volver abrir la aplicación debe ser redirigido a ese chat.
 
-En los scripts esta `channels.js - linea:12`, se detecta si la ruta es `/`, 
-de ser asi usando AJAX se busca el chat previo, para luego redirijirlo 
-hacia alli, esta informacion se guarda en una variable de Flask llamada
+En los scripts esta `channels.js - línea:12`, se detecta si la ruta es `/`, 
+de ser así usando AJAX se busca el chat previo, para luego ser redirigido 
+hacia allí, esta información se guarda en una variable de Flask llamada
 `session`.
 
 
@@ -83,9 +83,9 @@ hacia alli, esta informacion se guarda en una variable de Flask llamada
 > desarrollar una buena parte del mismo.
 
 1) Agregue un `context_processor` para siempre mostrar una lista de canales,
-no importe donde, pero la verdad no se si sirva de mucho.
+no importe donde, pero la verdad no sé si sirva de mucho.
 
-2) Pude haber hecho todo en una sola ruta, pero me complique con Socket, 
+2) Pude haber hecho todo en una sola ruta, pero me compliqué con Socket, 
 entonces me fui a por lo seguro que son las rutas de Flask. 
 
 3) Es mi primera vez creando un chat en tiempo real y sin base de datos, 
