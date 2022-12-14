@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import session, redirect, flash, url_for
 
+
 def login_required(f):
     @wraps(f)
     def decorate(*args, **kwargs):

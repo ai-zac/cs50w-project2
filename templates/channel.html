@@ -1,23 +1,23 @@
 {% extends "index.html" %}
-{% block tittle %}{{ current_channel }}{% endblock %}
+{% block tittle %} {{ current_channel }} {% endblock %}
 {% block chat %}
-    <ul id="chat" class="list-group list-group-flush">
-        {% for i in msgs %}
-            <li id='{{ i[0] }}' class='{{ i[1]["username"] }} list-group-item d-flex justify-content-between align-items-start '>
-                <div class="ms-2 me-auto text-break">
-                    <div class="fw-bold">{{ i[1]["username"] }}</div>
-                    {{ i[1]["msg"] }}
-                </div>
-                <span class="badge bg-primary rounded-pill">{{ i[1]["date"] }}</span>
-            </li>
-        {% endfor %}
-    </ul>
-    <form id="chat-block" class="container-fluid position-fixed bottom-0">
-        <div class="input-group">
-            <textarea type="text" class="msg form-control" placeholder="message"></textarea>
-        </div>
-        <input type="text" id="username" value="{{ user }}" hidden>
-        <input type="text" id="current-channel" value="{{ current_channel }}" hidden>
-        <button type="button" class="btn btn-light" id="send">SEND</button>
-    </form>
+<ul id="chat" class="list-group list-group-flush">
+  {% for i in msgs %}
+  <li class='{{ i["username"] }} list-group-item d-flex justify-content-between align-items-start'>
+    <div class="ms-2 me-auto text-break">
+      <div class="fw-bold">{{ i["username"] }}</div>
+      {{ i["msg"] }}
+    </div>
+    <span class="badge bg-primary rounded-pill">{{ i["date"] }}</span>
+  </li>
+  {% endfor %}
+</ul>
+<form id="chat-block" class="container-fluid position-fixed bottom-0">
+  <div class="input-group">
+    <textarea type="text" class="msg form-control" placeholder="message"></textarea>
+  </div>
+  <input type="text" id="username" value="{{ user }}" hidden>
+  <input type="text" id="current-channel" value="{{ current_channel }}" hidden>
+  <button type="button" class="btn btn-light" id="send">SEND</button>
+</form>
 {% endblock %}

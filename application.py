@@ -1,63 +1,69 @@
-import os
-
-from flask import Flask, render_template, redirect, request, session, flash, jsonify
-from flask_socketio import SocketIO, emit, send, join_room, leave_room, rooms
+from flask import Flask, render_template, redirect, request, session, jsonify
+from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from login_required import login_required
 import secrets
-import uuid
-
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = secrets.token_hex()
-socketio = SocketIO(app, cors_allowed_origins='*')
+socketio = SocketIO(app, cors_allowed_origins="*")
+
 chnls = ["General"]
-messages = {chnls[0]: {}}
-# session out flask's context
+messages = {chnls[0]: []}
 session_tmp = {}
 
 
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html", CHANNELS=chnls, user=session["username"], current_channel="Inicio")
+    return render_template(
+        "index.html",
+        CHANNELS=chnls,
+        user=session["username"],
+        current_channel="Inicio",
+    )
 
 
-@app.route("/<c>", methods=["GET", "POST"])
+@app.route("/<channel>", methods=["GET", "POST"])
 @login_required
-def channel(c):
-    u = session["username"]
-    session["current_channel"] = c
-    return render_template("channel.html", user = u, current_channel = c, msgs = list(messages[c].items()))
+def channel(channel):
+    name = session["username"]
+    session["current_channel"] = channel
+    return render_template(
+        "channel.html",
+        user=name,
+        current_channel=channel,
+        msgs=messages[channel],
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     global session_tmp
     if request.method == "POST":
-        u = request.form.get("username")
-        session["username"] = u
+        name = request.form.get("username")
+        session["username"] = name
         session["current_channel"] = ""
-        session_tmp[u] = ""
+        session_tmp[name] = ""
         return redirect("/")
     else:
         return render_template("login.html")
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
 @login_required
 def logout():
     session.clear()
     return redirect("/login")
 
+
 # AJAX route
-@app.route("/rmb-chnl", methods=["GET"])
+@app.route("/get_previous_chnl", methods=["GET"])
 @login_required
-def rmb_chnl():
-    s = session
-    if s["current_channel"] == "":
+def get_previous_chnl():
+    if session["current_channel"] == "":
         return jsonify({"success": False})
-    return jsonify({"success": True, "user": s["username"]})
+    return jsonify({"success": True, "channel": session["current_channel"]})
 
 
 @app.context_processor
@@ -75,48 +81,61 @@ def create_channel(new_chnl):
         emit("error", "Ese nombre ya esta en uso", broadcast=False)
     else:
         chnls.append(new_chnl)
-        messages[new_chnl] = {}
+        messages[new_chnl] = []
         emit("showChannel", new_chnl, broadcast=True)
     lwr_chnls = []
 
 
 @socketio.on("enterRoom")
 def enter_room():
-    u = session["username"]
-    c = session["current_channel"]
-    join_room(c)
-    session_tmp[u] = c
-    emit("alertStatus", f"Has entrado al cuarto {c}", broadcast=False)
-    emit("alertStatus", f"{u} ha entrado al cuarto {c}", broadcast=True, include_self=False, to=c)
+    user = session["username"]
+    chnl = session["current_channel"]
+
+    session_tmp[user] = chnl
+    join_room(chnl)
+    emit("alertStatus", f"Has entrado al cuarto {chnl}", broadcast=False)
+    emit(
+        "alertStatus",
+        f"{user} ha entrado al cuarto {chnl}",
+        broadcast=True,
+        include_self=False,
+        to=chnl,
+    )
 
 
 @socketio.on("exitRoom")
 def exit_room():
-    u = session["username"]
-    c = session_tmp[u]
-    if c != "":
-        leave_room(c)
-        emit("alertStatus", f"{u} ha salido del cuarto" , broadcast=True, include_self=False, to=c)
+    user = session["username"]
+    chnl = session_tmp[user]
+    if chnl != "":
+        leave_room(chnl)
+        emit(
+            "alertStatus",
+            f"{user} ha salido del cuarto",
+            broadcast=True,
+            include_self=False,
+            to=chnl,
+        )
 
 
-@socketio.on('message')
-def process_messages(m, u, d, cc):
-    l = list(messages[cc].items())
-    id_m = uuid.uuid1()
+@socketio.on("message")
+def process_messages(msg, user, date, current_channel):
+    messages[current_channel].append(
+        {"username": user, "msg": msg, "date": date}
+    )
 
     # Only save 100 messages
-    if len(l) > 100:
-        for i in range(0, (len(l) - 100)):
-            l.pop(0)
-        messages[cc] = dict((x, y) for x, y in l)
+    length_channel = len(messages[current_channel])
+    if length_channel > 100:
+        for i in range(0, length_channel - 100):
+            messages[current_channel].pop(0)
+    send((msg, user, date), to=current_channel)
 
-    messages[cc].update({id_m.hex: {"msg": m, "username": u, "date": d}})
-    send((m, u, d, id_m.hex), to=cc)
-    emit("enableDelMsg", (id_m.hex, cc))
 
-@socketio.on('delMsg')
+@socketio.on("delMsg")
 def del_msg(i, cc):
     del messages[cc][i]
+
 
 if __name__ == "__main__":
     socketio.run(app)

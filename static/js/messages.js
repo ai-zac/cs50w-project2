@@ -11,9 +11,9 @@ document.querySelector("#send").onclick = () => {
 
 
 // Show the messages
-socket.on("message", (msgOut, username, dateMsg, id) => {
+socket.on("message", (msgOut, username, dateMsg) => {
     document.querySelector("#chat").innerHTML += (
-        `<li id=${id} class='${username} list-group-item d-flex justify-content-between align-items-start '>
+        `<li class='${username} list-group-item d-flex justify-content-between align-items-start '>
             <div class="ms-2 me-auto text-break">
                 <div class="fw-bold">${username}</div>
                 ${msgOut}
@@ -42,15 +42,3 @@ socket.on("alertStatus", (status) => {
 socket.on("error", (msg) => {
     alert(`${msg}`)
 });
-
-while (true) {
-    u = document.querySelector("#username")
-    alert("Agregando funcionalidad")
-    msgs = document.querySelectorAll(`.${u}`).forEach(item => {
-        item.innerHTML += (`<button type="button" class="btn-close" aria-label="Close"></button>`);
-        item.querySelector("button").onclick = () => {
-            emit("delMsg", (id, currentChannel));
-            item.remove();
-        };
-    });
-}

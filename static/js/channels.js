@@ -1,36 +1,28 @@
 const socket = io();
 
-/*
- * First: you click into channel
- * Then: you will be redirect
- * and next you will be join and 
- * leave the previous channel
-*/
-
+// Enter the new room after be redirect
 document.addEventListener("DOMContentLoaded", () => {
     if (document.location.pathname != "/") {
         socket.emit("exitRoom");
         socket.emit("enterRoom");
-    } 
+    }
 });
 
-// Redirect to current channel
+// Redirect to previous channel
 if (window.location.pathname == "/") {
+    /*
+     * r is for request, i try to change the name
+     * but that broken this functionality
+    */
     const r = new XMLHttpRequest();
     r.onload = () => {
         const data = JSON.parse(r.responseText);
         if (data.success) {
-            p = localStorage.getItem(data.user);
-            window.location.pathname = p;
+            window.location.pathname = data.channel;
         };
     };
-    r.open("GET", "/rmb-chnl");
+    r.open("GET", "/get_previous_chnl");
     r.send();
-} else {
-    // save the current session
-    u = document.querySelector("#username").value;
-    cc = document.querySelector("#current-channel").value;
-    localStorage.setItem(u, cc);
 }
 
 // Create a new channel 
