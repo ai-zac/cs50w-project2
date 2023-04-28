@@ -1,1 +1,7 @@
 env
+.$SCHEMA.bkp
+.mypy_cache
+.vim
+SCHEMA
+SCHEMA.drawio
+__pycache__

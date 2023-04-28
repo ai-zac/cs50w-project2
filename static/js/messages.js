@@ -5,6 +5,7 @@ document.querySelector("#send").onclick = () => {
     username = document.querySelector("#username").value;
     msgIn = document.querySelector(".msg");
     currentChannel = document.querySelector("#current-channel").value;
+
     socket.send(msgIn.value, username, dateMsg, currentChannel);
     msgIn.value = "";
 };
@@ -12,14 +13,15 @@ document.querySelector("#send").onclick = () => {
 
 // Show the messages
 socket.on("message", (msgOut, username, dateMsg) => {
-    document.querySelector("#chat").innerHTML += (
-        `<li class='${username} list-group-item d-flex justify-content-between align-items-start '>
+    document.querySelector("#chat").innerHTML += (`
+        <li class='${username} list-group-item d-flex justify-content-between align-items-start '>
             <div class="ms-2 me-auto text-break">
                 <div class="fw-bold">${username}</div>
                 ${msgOut}
             </div>
             <span class="badge bg-primary rounded-pill">${dateMsg}</span>
-        </li>`);
+        </li>`
+    );
 });
 
 // Alert where are you, "do you know the way"
@@ -35,8 +37,8 @@ socket.on("alertStatus", (status) => {
             <div class="toast-body">
                 ${status}
             </div>
-        </div>   
-    `);
+        </div>`   
+    );
 });
 
 socket.on("error", (msg) => {

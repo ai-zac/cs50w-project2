@@ -38,8 +38,8 @@ document.querySelector(".createChannel").onclick = () => {
 
 // Show the new channel
 socket.on("showChannel", (channel) => {
-    document.querySelector(".channels-list").innerHTML += (
-        `<li class="nav-item channel list-group-item">
+    document.querySelector(".channels-list").innerHTML += (`
+        <li class="nav-item channel list-group-item">
             <a class="nav-link" href="/${channel}">${channel}</a>
         </li>`
     );
