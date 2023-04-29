@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session, jsonify
+from flask import Flask, flash, render_template, redirect, request, session, jsonify
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from login_required import login_required
 import secrets
@@ -14,7 +14,7 @@ session_tmp = {}
 
 
 @app.route("/")
-@login_required
+#@login_required
 def index():
     return render_template(
         "index.html",
@@ -24,16 +24,21 @@ def index():
     )
 
 
-@app.route("/<channel>", methods=["GET", "POST"])
-@login_required
+@app.route("/<channel>")
+#@login_required
 def channel(channel):
+    msgs = []
+    try:
+        msgs = messages[channel]
+    except KeyError:
+        return redirect("/")
     name = session["username"]
     session["current_channel"] = channel
     return render_template(
         "channel.html",
         user=name,
         current_channel=channel,
-        msgs=messages[channel],
+        msgs=msgs,
     )
 
 
@@ -51,7 +56,7 @@ def login():
 
 
 @app.route("/logout", methods=["POST"])
-@login_required
+#@login_required
 def logout():
     session.clear()
     return redirect("/login")
@@ -59,7 +64,7 @@ def logout():
 
 # AJAX route
 @app.route("/get_previous_chnl", methods=["GET"])
-@login_required
+#@login_required
 def get_previous_chnl():
     if session["current_channel"] == "":
         return jsonify({"success": False})
