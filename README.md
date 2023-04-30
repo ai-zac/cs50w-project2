@@ -1,20 +1,29 @@
 # FLACK || CS50w-Project02
+> *Proyecto inspirado de cs50w edición 2019 por Harvard*,
+> *[Flack][1]* 
 
-> Proyecto inspirado de cs50w edición 2019 por Harvard.
-> Flack[¹] 
+----
+
+#### TODO:
+- [x] ~~Solucionar los bugs de la version de entrega.~~
+- [ ] Implementar al menos 1 funcionalidad especial o toque personal.
+
+----
+
 ### Tecnologías usadas.
-- Python-Flask
+- Flask
 - SocketIO-Flask
 - JavaScript
 - SASS
-- CSS
-- HTML
+- HTML&CSS
+
+----
 
 ### Estructura del directorio.
 ```
 📁
 ├── application.py
-├── login_required.py
+├── tools.py
 ├── README.md
 ├── requirements.txt
 ├── templates
@@ -34,46 +43,40 @@
         └── messages.js
 ```
 
-## Dudas sobre ciertos funcionamientos.
-### ¿Cómo funciona el cambio de chats? 
+----
 
-Al dar click en cualquier chat este primero es redirigido a la
-ruta `/channel` en donde *"channel"* es una *variable*[³] dentro de
-la ruta, de aquŕ sacamos el nombre del chat para poder obtener la información
-necesaria.
+### Dudas sobre ciertos funcionamientos.
+> #### ¿Cómo funciona el cambio de chats?
 
-Luego de que la página cargase en la nueva ruta, se activan las 
-funciones de socket de `exitRoom` y `enterRoom` en simultáneo, para ya luego
-dejar que el usuario pueda enviar mensajes y que estos se guarden 
-correctamente.
+Primero redirrecionamos con el servidor en [*`/<channel>`*][2] , luego en el cliente 
+ejecutamos *`exitRoom`* y *`enterRoom`* simultanemente, saliendonos de cualquier
+canal previo y entrando al actual, esto cada vez que carguemos la pagina.
 
 
-### ¿Cómo funciona la redirección hacia un chat, luego de haber cerrado su ventana o pestaña?
+> #### ¿Cómo funciona la redirección hacia un chat, luego de haber cerrado su ventana o pestaña?
 
-Al cargar la pagina en `channels.js` obtenemos del servidor mediante Socket 
-el nombre del canal previo antes de cerrarlo, junto con un estado de True o False,
-dependiendo del estado cambiamos la ruta en el cliente en `window.location.pathname` 
+Al cargar la pagina en *`channels.js`* obtenemos del servidor mediante Socket 
+el nombre del canal previo antes de cerrarlo, junto con un estado de *`True`* o *`False`*,
+dependiendo del estado cambiamos la ruta en el cliente en *`window.location.pathname`* 
 colocandole el nombre del canal.
 
 ----
 
-
 ### Detalles
 
-> Esto no es el toque personal, no pude completarlo a tiempo o por lo menos
-> desarrollar una buena parte del mismo.
+1) El toque personal no pude completarlo a tiempo o por lo menos
+ desarrollar una buena parte del mismo. D:
 
-1) Agregue un `context_processor` para siempre mostrar una lista de canales,
-no importe donde, pero la verdad no sé si sirva de mucho.
+2) Agregue un *`context_processor`* para siempre mostrar una lista de canales,
+sin importar donde, pero la verdad no sé si sirva de mucho.
 
-2) Pude haber hecho todo en una sola ruta, pero me compliqué con Socket, 
-entonces me fui a por lo seguro que son las rutas de Flask. 
+3) Pude haber hecho todo en una sola ruta, pero me compliqué con Socket, 
+entonces me fui a por lo que más dominaba: *las rutas de Flask*. 
 
-3) Es mi primera vez creando un chat en tiempo real y sin base de datos, 
+4) Es mi primera vez creando un chat en tiempo real y sin base de datos, 
 hablando de ***BASE DE DATOS***, no recuerdo haber usado el almacenamiento 
-del navegador, todos los datos son procesados en la memoria del servidor, 
-en variables como `session`, `session_tmp`, `messages` y `chnls`.
+del navegador/cliente, todos los datos son procesados en la memoria del servidor, 
+usando variables globales como *`session`*, *`db_messages`* y *`channels`*.
 
-[¹]:<https://cs50.harvard.edu/extension/web/2019/fall/projects/2/>
-[²]:<https://linux.die.net/man/1/tree>
-[³]:<https://flask.palletsprojects.com/en/2.2.x/quickstart/#variable-rules>
+[1]:<https://cs50.harvard.edu/extension/web/2019/fall/projects/2/>
+[2]:<https://flask.palletsprojects.com/en/2.2.x/quickstart/#variable-rules>
