@@ -1,15 +1,8 @@
 # FLACK || CS50w-Project02
 
-> Proyecto inspirado de cs50w edición 2018 por Harvard
+> Proyecto inspirado de cs50w edición 2019 por Harvard.
 > Flack[¹] 
-
-> *El link es de la edición 2019, no encontre la del 2018*
-
-
----
-
-
-### Tecnologías usadas
+### Tecnologías usadas.
 - Python-Flask
 - SocketIO-Flask
 - JavaScript
@@ -17,12 +10,7 @@
 - CSS
 - HTML
 
-
-### Directorio
-> No mucho que agregar, solo un orden clásico de directorios para 
-> Flask. 
-
-> **P.D.** Utilice *tree*[²] para sacar este esquema en ASCII 
+### Estructura del directorio.
 ```
 📁
 ├── application.py
@@ -46,8 +34,7 @@
         └── messages.js
 ```
 
-## Ahora algunas preguntas sobre ciertos funcionamientos
-
+## Dudas sobre ciertos funcionamientos.
 ### ¿Cómo funciona el cambio de chats? 
 
 Al dar click en cualquier chat este primero es redirigido a la
