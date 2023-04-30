@@ -15,9 +15,9 @@
 <body>
   <nav class="navbar navbar-light bg-light fixed-top">
     <div class="container-fluid d-flex flex-row">
-      <!-- narvbar oncanvas -->
+      <!-- NAVBAR ONCANVAS -->
       <a class="p-2 flex-grow-1 navbar-brand " href="#">
-        <h1><span class="badge bg-secondary">@{{ user }} - #{{ current_channel }}</span></h1>
+        <h1><span class="badge bg-secondary">@{{ USER }} - #{{ STR_CURRENT_CHANNEL }}</span></h1>
       </a>
       <form action="/logout" method="POST">
         <button class="p-2 btn btn-secondary" type="submit">Logout</button>
@@ -26,7 +26,8 @@
         aria-controls="offcanvasNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <!-- navbar offcanvas -->
+
+      <!-- NAVBAR OFFCANVAS -->
       <div class="offcanvas offcanvas-end text-bg-light" tabindex="-1" id="offcanvasNavbar"
         aria-labelledby="offcanvasNavbarLabel">
         <div class="offcanvas-header">
@@ -34,8 +35,9 @@
           <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas"
             aria-label="Close"></button>
         </div>
+        <!-- BODY NAVBAR OFFCANVAS -->
         <div class="offcanvas-body">
-          <!-- Create new channel -->
+          <!-- CREATE CHANNEL FORM -->
           <form class="d-flex mt-3">
             <div class="input-group me-2">
               <span class="input-group-text" id="basic-addon1">#</span>
@@ -44,7 +46,8 @@
             </div>
             <button type="button" class="btn btn-success createChannel">Create</button>
           </form>
-          <!-- Channel List -->
+
+          <!-- CHANNEL LIST -->
           <ul class="channels-list list-group list-group-flush navbar-nav justify-content-end flex-grow-1 pe-3">
             {% for channel in CHANNELS %}
             <li class="nav-item channel list-group-item">

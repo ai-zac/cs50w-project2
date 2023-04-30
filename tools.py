@@ -10,3 +10,11 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorate
+
+
+def channel_find(channel, messages):
+    if channel not in messages:
+        flash("Channel doesn't find it")
+        return False
+    return True
+

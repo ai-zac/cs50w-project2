@@ -6,24 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
         socket.emit("exitRoom");
         socket.emit("enterRoom");
     }
+    else if (window.location.pathname == "/"){
+       socket.emit("get_previous_channel")
+    }
 });
 
-// Redirect to previous channel
-if (window.location.pathname == "/") {
-    /*
-     * r is for request, i try to change the name
-     * but that broken this functionality
-    */
-    const r = new XMLHttpRequest();
-    r.onload = () => {
-        const data = JSON.parse(r.responseText);
-        if (data.success) {
-            window.location.pathname = data.channel;
-        };
+socket.on("redirect_channel", (state, channel) => {
+    if (state) {
+        window.location.pathname = channel;
     };
-    r.open("GET", "/get_previous_chnl");
-    r.send();
-}
+});
 
 // Create a new channel 
 document.querySelector(".createChannel").onclick = () => {

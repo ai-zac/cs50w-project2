@@ -1,8 +1,9 @@
 {% extends "index.html" %}
-{% block tittle %} {{ current_channel }} {% endblock %}
+{% block tittle %} {{ STR_CURRENT_CHANNEL }} {% endblock %}
 {% block chat %}
+<!-- CHAT -->
 <ul id="chat" class="list-group list-group-flush">
-  {% for i in msgs %}
+  {% for i in LIST_MESSAGES %}
   <li class='{{ i["username"] }} list-group-item d-flex justify-content-between align-items-start'>
     <div class="ms-2 me-auto text-break">
       <div class="fw-bold">{{ i["username"] }}</div>
@@ -12,14 +13,19 @@
   </li>
   {% endfor %}
 </ul>
+<!-- END CHAT -->
 
+<!-- MESSAGE INPUT -->
 <form id="chat-block" class="container-fluid position-fixed bottom-0">
+  <!-- INPUT --> 
   <div class="input-group">
     <textarea type="text" class="msg form-control" placeholder="message"></textarea>
   </div>
-  <input type="text" id="username" value="{{ user }}" hidden>
-  <input type="text" id="current-channel" value="{{ current_channel }}" hidden>
+  <!-- CREDENTIALS -->
+  <input type="text" id="username" value="{{ USER }}" hidden>
+  <input type="text" id="current-channel" value="{{ STR_CURRENT_CHANNEL }}" hidden>
 
   <button type="button" class="btn btn-light" id="send">SEND</button>
 </form>
+<!-- END MESSAGE INPUT -->
 {% endblock %}
