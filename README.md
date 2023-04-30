@@ -13,7 +13,6 @@
 - Python-Flask
 - SocketIO-Flask
 - JavaScript
-- AJAX
 - SASS
 - CSS
 - HTML
@@ -62,17 +61,12 @@ dejar que el usuario pueda enviar mensajes y que estos se guarden
 correctamente.
 
 
-### ¿Cómo funciona la redirección al chat previo?
+### ¿Cómo funciona la redirección hacia un chat, luego de haber cerrado su ventana o pestaña?
 
-> Con lo del ***chat previo*** me refiero al chat en el que estaba el 
-> usuario antes de cerrar la ventana o pestaña en donde estaba Flack 
-> , este al volver abrir la aplicación debe ser redirigido a ese chat.
-
-En los scripts esta `channels.js - línea:12`, se detecta si la ruta es `/`, 
-de ser así usando AJAX se busca el chat previo, para luego ser redirigido 
-hacia allí, esta información se guarda en una variable de Flask llamada
-`session`.
-
+Al cargar la pagina en `channels.js` obtenemos del servidor mediante Socket 
+el nombre del canal previo antes de cerrarlo, junto con un estado de True o False,
+dependiendo del estado cambiamos la ruta en el cliente en `window.location.pathname` 
+colocandole el nombre del canal.
 
 ----
 
@@ -94,5 +88,5 @@ del navegador, todos los datos son procesados en la memoria del servidor,
 en variables como `session`, `session_tmp`, `messages` y `chnls`.
 
 [¹]:<https://cs50.harvard.edu/extension/web/2019/fall/projects/2/>
-[²]: <https://linux.die.net/man/1/tree>
-[³]: <https://flask.palletsprojects.com/en/2.2.x/quickstart/#variable-rules>
+[²]:<https://linux.die.net/man/1/tree>
+[³]:<https://flask.palletsprojects.com/en/2.2.x/quickstart/#variable-rules>
