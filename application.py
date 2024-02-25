@@ -1,18 +1,17 @@
-from flask import Flask, flash, render_template, redirect, request, session, jsonify
+from flask import Flask, render_template, redirect, request, session
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from tools import channel_find, login_required
 import secrets
-
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = secrets.token_hex()
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# FLASK's variables 
+# FLASK's variables
 CHANNELS = ["General"]
-db_messages = {CHANNELS[0]: []}
+MESSAGES = {CHANNELS[0]: []}
 
-# SocketIO's variable 
+# SocketIO's variable
 previous_channel = {}
 
 
@@ -30,7 +29,7 @@ def index():
 @app.route("/<channel>")
 @login_required
 def redirect_channel(channel):
-    if not channel_find(channel, db_messages):
+    if not channel_find(channel, MESSAGES):
         return redirect("/")
 
     session["current_channel"] = channel
@@ -39,7 +38,7 @@ def redirect_channel(channel):
         "channel.html",
         USER=session["username"],
         STR_CURRENT_CHANNEL=session["current_channel"],
-        LIST_MESSAGES=db_messages[channel],
+        LIST_MESSAGES=MESSAGES[channel],
     )
 
 
@@ -75,7 +74,7 @@ def create_channel(new_chnl):
         emit("error", "That name is already used", broadcast=False)
     else:
         CHANNELS.append(new_chnl)
-        db_messages[new_chnl] = []
+        MESSAGES[new_chnl] = []
         emit("showChannel", new_chnl, broadcast=True)
     lwr_channel = []
 
@@ -114,30 +113,27 @@ def enter_room():
 
 @socketio.on("message")
 def process_messages(msg, user, date, current_channel):
-    db_messages[current_channel].append(
-        {"username": user, "msg": msg, "date": date}
-    )
+    MESSAGES[current_channel].append({"username": user, "msg": msg, "date": date})
 
     # Only save 100 messages
-    length_channel = len(db_messages[current_channel])
-    if length_channel > 100:
-        for i in range(0, length_channel - 100):
-            db_messages[current_channel].pop(0)
+    len_c = len(MESSAGES[current_channel])
+    if len_c > 100:
+        for i in range(0, len_c - 100):
+            MESSAGES[current_channel].pop(0)
     send((msg, user, date), to=current_channel)
 
 
 @socketio.on("get_previous_channel")
 def get_previous_channel():
-    if session["current_channel"] == None:
+    if session["current_channel"] is None:
         emit("redirect_channel", (False, "/"), broadcast=False)
     else:
-        emit("redirect_channel", (True, session["current_channel"]), broadcast=False) 
-
+        emit("redirect_channel", (True, session["current_channel"]), broadcast=False)
 
 
 @socketio.on("delMsg")
 def del_msg(i, cc):
-    del db_messages[cc][i]
+    del MESSAGES[cc][i]
 
 
 if __name__ == "__main__":
